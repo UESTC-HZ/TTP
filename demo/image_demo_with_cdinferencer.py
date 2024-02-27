@@ -26,7 +26,7 @@ def main():
     parser.add_argument(
         '--opacity',
         type=float,
-        default=0.5,
+        default=1.,
         help='Opacity of painted segmentation map. In (0, 1] range.')
     parser.add_argument(
         '--with-labels',
@@ -37,13 +37,12 @@ def main():
 
     # build the model from a config file and a checkpoint file
     mmseg_inferencer = OpenCDInferencer(
-        args.model,
-        args.checkpoint,
+        model=args.model,
+        weights=args.checkpoint,
         dataset_name=args.dataset_name,
         device=args.device,
-        # classes=['unchanged', 'changed'],
-        palette=[[0, 0, 0], [255, 255, 255]]
-    )
+        classes=('unchanged', 'changed'),
+        palette=[[0, 0, 0], [255, 255, 255]])
 
     # test a single image
     mmseg_inferencer(

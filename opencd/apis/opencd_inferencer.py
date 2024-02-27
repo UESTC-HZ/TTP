@@ -39,7 +39,6 @@ class OpenCDInferencer(MMSegInferencer):
                  scope: Optional[str] = 'opencd',
                  **kwargs) -> None:
         super().__init__(scope=scope, **kwargs)
-
         classes = classes if classes else self.model.dataset_meta.classes
         palette = palette if palette else self.model.dataset_meta.palette
         self.visualizer.set_dataset_meta(classes, palette, dataset_name)
@@ -71,7 +70,9 @@ class OpenCDInferencer(MMSegInferencer):
                   show: bool = False,
                   wait_time: int = 0,
                   img_out_dir: str = '',
-                  opacity: float = 1.0) -> List[np.ndarray]:
+                  opacity: float = 1.0,
+                  with_labels: bool = False
+                  ) -> List[np.ndarray]:
         """Visualize predictions.
 
         Args:
@@ -127,7 +128,7 @@ class OpenCDInferencer(MMSegInferencer):
                 pred,
                 show=show,
                 wait_time=wait_time,
-                draw_gt=False,
+                draw_gt=with_labels,
                 draw_pred=True,
                 out_file=out_file)
             if return_vis:

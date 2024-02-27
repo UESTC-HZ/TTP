@@ -115,28 +115,29 @@ conda create -n ttp python=3.10 -y
 conda activate ttp
 ```
 
-**Step 2**: Install [PyTorch](https://pytorch.org/get-started/locally/).
+**Step 2**: Install [PyTorch2.1.x](https://pytorch.org/get-started/locally/).
 
-Linux:
+Linux/Windows:
 ```shell
-pip install torch torchvision torchaudio
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 ```
-Windows:
+Or
+
 ```shell
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-**Step 3**: Install [MMCV](https://mmcv.readthedocs.io/en/latest/get_started/installation.html).
+**Step 3**: Install [MMCV2.1.x](https://mmcv.readthedocs.io/en/latest/get_started/installation.html).
 
 ```shell
 pip install -U openmim
-mim install "mmcv>=2.0.0"
+mim install mmcv==2.1.0
 ```
 
 **Step 4**: Install other dependencies.
 
 ```shell
-pip install -U wandb einops importlib peft scipy ftfy prettytable torchmetrics
+pip install -U wandb einops importlib peft==0.8.2 scipy ftfy prettytable torchmetrics==1.3.1 transformers==4.38.1
 ```
 
 
@@ -258,7 +259,7 @@ sh ./tools/dist_test.sh configs/TTP/xxx.py ${CHECKPOINT_FILE} ${GPU_NUM}  # xxx.
 #### Single Image Prediction:
 
 ```shell
-python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE1} configs/TTP/ttp_sam_large_levircd_infer.py --weights ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE is the image file you want to predict, xxx.py is the configuration file, CHECKPOINT_FILE is the checkpoint file you want to use, OUTPUT_DIR is the output path of the prediction result
+python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE2} configs/TTP/ttp_sam_large_levircd_infer.py --checkpoint ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE is the image file you want to predict, xxx.py is the configuration file, CHECKPOINT_FILE is the checkpoint file you want to use, OUTPUT_DIR is the output path of the prediction result
 ```
 
 
