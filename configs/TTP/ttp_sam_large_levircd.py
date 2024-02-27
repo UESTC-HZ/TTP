@@ -19,8 +19,7 @@ default_hooks = dict(
                        img_shape=(1024, 1024, 3))
 )
 vis_backends = [dict(type='CDLocalVisBackend'),
-                dict(type='WandbVisBackend',
-                     init_kwargs=dict(project='samcd', group='levircd', name='ttp_sam_large_levircd'))
+                dict(type='WandbVisBackend', init_kwargs=dict(project='samcd', group='levircd', name='ttp_sam_large_levircd'))
                 ]
 
 visualizer = dict(

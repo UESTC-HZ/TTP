@@ -70,6 +70,9 @@
 
 🌟 **2023.12.30** 发布了在 Levir-CD 上训练的[模型](https://huggingface.co/spaces/KyanChen/TTP/blob/main/ckpt/epoch_270.pth)。
 
+🌟 **2024.02.10** 本项目被收录到 [Open-CD](https://github.com/likyoo/open-cd/tree/main/configs/ttp) 项目中。
+
+
 [//]: # (## TODO)
 
 
@@ -116,28 +119,30 @@ conda create -n ttp python=3.10 -y
 conda activate ttp
 ```
 
-**步骤 2**：安装 [PyTorch](https://pytorch.org/get-started/locally/)。
+**步骤 2**：安装 [PyTorch2.1.x](https://pytorch.org/get-started/locally/)。
 
-Linux:
+Linux/Windows:
 ```shell
-pip install torch torchvision torchaudio
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 ```
-Windows:
+或者
+
 ```shell
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-**步骤 3**：安装 [MMCV](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)。
+
+**步骤 3**：安装 [MMCV2.1.x](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)。
 
 ```shell
 pip install -U openmim
-mim install "mmcv>=2.0.0"
+mim install mmcv==2.1.0
 ```
 
 **步骤 4**：安装其他依赖项。
 
 ```shell
-pip install -U wandb einops importlib peft scipy ftfy prettytable torchmetrics
+pip install -U wandb einops importlib peft==0.8.2 scipy ftfy prettytable torchmetrics==1.3.1 transformers==4.38.1
 ```
 
 
@@ -261,7 +266,7 @@ sh ./tools/dist_test.sh configs/TTP/xxx.py ${CHECKPOINT_FILE} ${GPU_NUM}  # xxx.
 #### 单张图像预测：
 
 ```shell
-python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE1} configs/TTP/ttp_sam_large_levircd_infer.py --weights ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE 为你想要预测的图像文件，xxx.py 为使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件，OUTPUT_DIR 为预测结果的输出路径
+python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE2} configs/TTP/ttp_sam_large_levircd_infer.py --weights ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE 为你想要预测的图像文件，xxx.py 为使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件，OUTPUT_DIR 为预测结果的输出路径
 ```
 
 

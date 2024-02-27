@@ -70,6 +70,7 @@ If you find this project helpful, please give us a star ⭐️, your support is 
 
 🌟 **2023.12.30** Released the [model](https://huggingface.co/spaces/KyanChen/TTP/blob/main/ckpt/epoch_270.pth) trained on Levir-CD.
 
+🌟 **2024.02.10** This project has been included in the [Open-CD](https://github.com/likyoo/open-cd/tree/main/configs/ttp) project.
 
 ## Table of Contents
 
