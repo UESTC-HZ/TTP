@@ -266,7 +266,7 @@ sh ./tools/dist_test.sh configs/TTP/xxx.py ${CHECKPOINT_FILE} ${GPU_NUM}  # xxx.
 #### 单张图像预测：
 
 ```shell
-python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE2} configs/TTP/ttp_sam_large_levircd_infer.py --weights ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE 为你想要预测的图像文件，xxx.py 为使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件，OUTPUT_DIR 为预测结果的输出路径
+python demo/image_demo_with_cdinferencer.py ${IMAGE_FILE1} ${IMAGE_FILE2} configs/TTP/ttp_sam_large_levircd_infer.py --checkpoint ${CHECKPOINT_FILE} --out-dir ${OUTPUT_DIR}  # IMAGE_FILE 为你想要预测的图像文件，xxx.py 为使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件，OUTPUT_DIR 为预测结果的输出路径
 ```
 
 

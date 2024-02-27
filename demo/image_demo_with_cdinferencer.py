@@ -1,3 +1,5 @@
+import sys
+sys.path.append(sys.path[0] + "/..")
 from argparse import ArgumentParser
 from opencd.apis import OpenCDInferencer
 
@@ -39,7 +41,7 @@ def main():
         args.checkpoint,
         dataset_name=args.dataset_name,
         device=args.device,
-        classes=('unchanged', 'changed'),
+        # classes=['unchanged', 'changed'],
         palette=[[0, 0, 0], [255, 255, 255]]
     )
 
