@@ -63,7 +63,7 @@ model = dict(
             attn_drop_rate=0,
             mlp_ratios=None,
             out_indices=(0, ),
-            //init_cfg=dict(type='Pretrained', checkpoint=pretrain_ckpt_path, prefix='backbone.'),
+            #init_cfg=dict(type='Pretrained', checkpoint=pretrain_ckpt_path, prefix='backbone.'),
         ),
     ),
     neck=dict(
