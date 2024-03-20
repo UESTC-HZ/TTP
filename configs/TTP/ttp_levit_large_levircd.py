@@ -127,7 +127,7 @@ test_pipeline = [
     dict(type='MultiImgPackSegInputs')
 ]
 
-batch_size_per_gpu = 2
+batch_size_per_gpu = 32
 
 train_dataloader = dict(
     batch_size=batch_size_per_gpu,
