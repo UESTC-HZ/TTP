@@ -6,7 +6,7 @@ import os.path as osp
 
 from mmengine.config import Config, DictAction
 from mmengine.runner import Runner
-
+os.environ['WANDB_MODE']='offline'
 
 # TODO: support fuse_conv_bn, visualization, and format_only
 def parse_args():
@@ -25,7 +25,10 @@ def parse_args():
     parser.add_argument(
         '--show', action='store_true', help='show prediction results')
     parser.add_argument(
-        '--show-dir',
+        '--draw_gt', action='store_true', help='draw ground ture results to compare with prediction results')
+    parser.add_argument(
+        '--show_dir',
+        default=None,
         help='directory where painted images will be saved. '
         'If specified, it will be automatically saved '
         'to the work_dir/timestamp/show_dir')
@@ -65,12 +68,11 @@ def trigger_visualization_hook(cfg, args):
         visualization_hook = default_hooks['visualization']
         # Turn on visualization
         visualization_hook['draw'] = True
-        if args.show:
-            visualization_hook['show'] = True
-            visualization_hook['wait_time'] = args.wait_time
-        if args.show_dir:
-            visualizer = cfg.visualizer
-            visualizer['save_dir'] = args.show_dir
+        visualization_hook['show'] = args.show
+        visualization_hook['wait_time'] = args.wait_time
+        visualization_hook['save_dir'] = args.show_dir
+        visualization_hook['draw_gt'] = args.draw_gt
+
     else:
         raise RuntimeError(
             'VisualizationHook must be included in default_hooks.'

@@ -250,6 +250,7 @@ sh ./tools/dist_train.sh configs/TTP/xxx.py ${GPU_NUM}  # xxx.py 为你想要使
 
 ```shell
 python tools/test.py configs/TTP/xxx.py ${CHECKPOINT_FILE}  # xxx.py 为你想要使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件
+python tools/test.py configs/TTP/xxx.py ${CHECKPOINT_FILE} --show_dir ${SAVE_OUTPUT_DIR} --draw_gt  # xxx.py 为你想要使用的配置文件，CHECKPOINT_FILE 为你想要使用的检查点文件，SAVE_OUTPUT_DIR 为你想要保存预测标签的文件夹，draw_gt 允许真实标签和预测标签画在同一张图片上
 ```
 
 #### 多卡测试：

@@ -34,6 +34,8 @@ class CDVisualizationHook(SegVisualizationHook):
                  interval: int = 50,
                  show: bool = False,
                  wait_time: float = 0.,
+                 save_dir: str = None,
+                 draw_gt: bool = False,
                  backend_args: Optional[dict] = None):
         self.img_shape = img_shape
         self.draw_on_from_to_img = draw_on_from_to_img
@@ -44,6 +46,8 @@ class CDVisualizationHook(SegVisualizationHook):
             CDLocalVisualizer.get_current_instance()
         self.interval = interval
         self.show = show
+        self.save_dir = save_dir
+        self.draw_gt = draw_gt
         if self.show:
             # No need to think about vis backends.
             self._visualizer._vis_backends = {}
@@ -101,7 +105,8 @@ class CDVisualizationHook(SegVisualizationHook):
                             _img_path, backend_args=self.backend_args)
                         _img = mmcv.imfrombytes(_img_bytes, channel_order='rgb')
                         img_from_to.append(_img)
-                        
+                       
+                out_file = self.save_dir + '/' + osp.basename(img_path) if self.save_dir is not None else None
                 img = np.zeros(self.img_shape)
                 self._visualizer.add_datasample(
                     window_name,
@@ -111,4 +116,5 @@ class CDVisualizationHook(SegVisualizationHook):
                     show=self.show,
                     wait_time=self.wait_time,
                     step=runner.iter,
-                    draw_gt=False)
+                    out_file=out_file,
+                    draw_gt=self.draw_gt)

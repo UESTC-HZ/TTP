@@ -243,6 +243,7 @@ If you want to use other change detection models, you can refer to [Open-CD](htt
 
 ```shell
 python tools/test.py configs/TTP/xxx.py ${CHECKPOINT_FILE}  # xxx.py is the configuration file you want to use, CHECKPOINT_FILE is the checkpoint file you want to use
+python tools/test.py configs/TTP/xxx.py ${CHECKPOINT_FILE} --show_dir ${SAVE_OUTPUT_DIR} --draw_gt  # xxx.py is the configuration file you want to use, CHECKPOINT_FILE is the checkpoint file you want to use, SAVE_OUTPUT_DIR is the directory of prediction label, draw_gt allows to draw ground ture label compared with prediction label
 ```
 
 #### Multi-card Testing:
