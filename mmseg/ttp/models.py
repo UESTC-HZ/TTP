@@ -20,6 +20,10 @@ from opencd.registry import MODELS
 
 from mmpretrain.models import build_norm_layer as build_norm_layer_mmpretrain
 
+import torch
+import torch.nn as nn
+from mmseg.ttp.fasterkan import FasterKAN as KAN
+
 
 @MODELS.register_module()
 class MMPretrainSamVisionEncoder(BaseModule):
@@ -107,6 +111,67 @@ class MLPSegHead(BaseDecodeHead):
         return out
 
 
+class kanBlock(Block):
+    def __init__(self, dim, num_heads=8, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
+                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm):
+        super().__init__(dim, num_heads)
+        self.kan = KAN([dim, 192, dim])
+
+    def forward(self, x):
+        b, t, d = x.shape
+        x = x + self.drop_path1(self.attn(self.norm1(x)))
+        x = x + self.drop_path2(self.kan(self.norm2(x).reshape(-1, x.shape[-1])).reshape(b, t, d))
+        return x
+
+@MODELS.register_module()
+class KANSegHead(BaseDecodeHead):
+    def __init__(self, out_size, interpolate_mode='bilinear', **kwargs):
+        super().__init__(input_transform='multiple_select', **kwargs)
+
+        self.interpolate_mode = interpolate_mode
+        num_inputs = len(self.in_channels)
+
+        assert num_inputs == len(self.in_index)
+        self.out_size = out_size
+        self.convs = nn.ModuleList()
+        self.kan_blocks = nn.ModuleList()  # Add kanBlocks
+
+        for i in range(num_inputs):
+            self.convs.append(
+                ConvModule(
+                    in_channels=self.in_channels[i],
+                    out_channels=self.channels,
+                    kernel_size=1,
+                    stride=1,
+                    norm_cfg=self.norm_cfg,
+                    act_cfg=self.act_cfg))
+            self.kan_blocks.append(kanBlock(dim=self.channels))  # Initialize kanBlock for each input
+
+        self.fusion_conv = ConvModule(
+            in_channels=self.channels * num_inputs,
+            out_channels=self.channels,
+            kernel_size=1,
+            norm_cfg=self.norm_cfg)
+    def forward(self, inputs):
+        inputs = self._transform_inputs(inputs)
+        outs = []
+        for idx in range(len(inputs)):
+            x = inputs[idx]
+            conv = self.convs[idx]
+            x = resize(
+                input=conv(x),
+                size=self.out_size,
+                mode=self.interpolate_mode,
+                align_corners=self.align_corners)
+            b, c, h, w = x.shape
+            x = x.view(b, c, -1).permute(0, 2, 1)  # Reshape to [batch_size, num_patches, channels]
+            x = self.kan_blocks[idx](x)
+            x = x.permute(0, 2, 1).view(b, c, h, w)  # Reshape back to original shape
+            outs.append(x)
+
+        out = self.fusion_conv(torch.cat(outs, dim=1))
+        out = self.cls_seg(out)
+        return out
 @MODELS.register_module()
 class LN2d(nn.Module):
     """A LayerNorm variant, popularized by Transformers, that performs
